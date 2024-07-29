@@ -12,3 +12,17 @@ resource "aws_instance" "first_instance" {
 }
 
 
+#######local-variable
+locals {
+  env_data = "Production Server"
+}
+
+resource "aws_instance" "first_instance" {
+    ami = "ami-04a81a99f5ec58529"
+    instance_type = "t2.micro"
+    count = var.terra_ec2
+
+tags = {
+    envirement = "${local.env_data}"
+}
+}
