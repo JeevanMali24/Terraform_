@@ -1,0 +1,14 @@
+##input-number-variables
+variable "terra_ec2" {
+  description = "creating the variable to generate multiple ec2"
+  type = number
+  default = 6
+}
+
+resource "aws_instance" "first_instance" {
+    ami = "ami-04a81a99f5ec58529"
+    instance_type = "t2.micro"
+    count = var.terra_ec2
+}
+
+
