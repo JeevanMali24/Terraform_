@@ -1,0 +1,27 @@
+provider "aws" {
+  region = "us-east-1"
+  access_key = ""
+  secret_key = ""
+}
+
+resource "aws_instance" "first_instance" {
+    ami = "ami-04a81a99f5ec58529"
+    instance_type = "t2.micro"
+    
+    tags = {
+        name = "terraform_server"
+        envirement = "UAT server"
+    }
+}
+
+output "first_output" {
+  value = "hellow terraform"
+}
+
+output "second_output" {
+  value = aws_instance.first_instance.public_ip
+}
+
+output "third_output" {
+  value = aws_instance.first_instance.private_ip
+}
