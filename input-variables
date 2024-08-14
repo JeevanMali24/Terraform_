@@ -1,4 +1,4 @@
-##input-number-variables
+------------------------------------------------------------input-number-variables-----------------------------------------------------------
 variable "terra_ec2" {
   description = "creating the variable to generate multiple ec2"
   type = number
@@ -12,7 +12,7 @@ resource "aws_instance" "first_instance" {
 }
 
 
-#######local-variable
+---------------------------------------------------------------local-variable----------------------------------------------------------------
 locals {
   env_data = "Production Server"
 }
@@ -25,4 +25,15 @@ resource "aws_instance" "first_instance" {
 tags = {
     envirement = "${local.env_data}"
 }
+}
+------------------------------------------------------------Input-list(string)-variable------------------------------------------------------
+variable "user_terra" {
+    description = "creating the IAM users"
+    type = list(string)
+    default = ["user1", "user2", "user3" ]
+}
+
+resources "aws_iam_user" "cloud_user" {
+    count = length(car.user_terra)
+    name = var.user_terra[count.index]
 }
