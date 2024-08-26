@@ -1,0 +1,58 @@
+provider "aws" {
+    region = ""
+    access_key = ""
+    secret_key = ""
+  
+}
+
+variable "cidr" {
+  default = "10.0.0.0/16"
+}
+
+resource "aws_key_pair" "example" {
+  key_name = "terraform-demo-key1"
+  public_key = file("${path.module}/id_rsa.pub")
+  
+}
+
+resource "aws_vpc" "myvpc1" {
+  cidr_block = var.cidr
+  
+}
+
+resource "aws_subnet" "sub1" {
+  vpc_id = aws_vpc.myvpc1.id
+  cidr_block = "10.0.0.0/24"
+  availability_zone = "us-east-1a"
+  map_public_ip_on_launch = true
+  
+}
+
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.myvpc1.id
+  
+}
+
+resource "aws_route_table" "RT" {
+  vpc_id = aws_vpc.myvpc1.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+  
+}
+
+resource "aws_security_group" "websg" {
+  name = "web"
+  vpc_id = aws_vpc.myvpc1.id
+
+  ingress {
+    description = "http connection"
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+}
