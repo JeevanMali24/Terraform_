@@ -9,16 +9,22 @@ variable "cidr" {
   default = "10.0.0.0/16"
 }
 
+######################################-------------key pair------------------##################################
+
 resource "aws_key_pair" "example" {
   key_name = "terraform-demo-key1"
   public_key = file("${path.module}/id_rsa.pub")
   
 }
 
+############################################-------------vpc------------------##################################
+
 resource "aws_vpc" "myvpc1" {
   cidr_block = var.cidr
   
 }
+
+##########################################-------------subnet------------------##################################
 
 resource "aws_subnet" "sub1" {
   vpc_id = aws_vpc.myvpc1.id
@@ -28,10 +34,14 @@ resource "aws_subnet" "sub1" {
   
 }
 
+######################################-------------internet_getway------------------##################################
+
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.myvpc1.id
   
 }
+
+######################################-------------route table------------------##################################
 
 resource "aws_route_table" "RT" {
   vpc_id = aws_vpc.myvpc1.id
@@ -42,6 +52,8 @@ resource "aws_route_table" "RT" {
   }
   
 }
+
+######################################-------------security group------------------##################################
 
 resource "aws_security_group" "websg" {
   name = "web"
@@ -77,6 +89,8 @@ resource "aws_security_group" "websg" {
 }
 
 
+######################################-------------aws instance------------------##################################
+
 resource "aws_instance" "server" {
   ami = ""
   instance_type = ""
@@ -106,5 +120,3 @@ resource "aws_instance" "server" {
     
   }
 }
-
-
