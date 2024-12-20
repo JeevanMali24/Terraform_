@@ -1,9 +1,10 @@
-``` provider "aws" {
+```
+provider "aws" {
     region = ""
     secret_key = ""
     access_key = ""
   
-} ```
+} 
 
 variable "instancetype" {
     description = "type of instance"
